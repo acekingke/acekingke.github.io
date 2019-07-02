@@ -97,7 +97,7 @@ ukowski, M. (2009). Balancing vectorized query execution with bandwidth-optimize
 <script type="math/tex; mode=display">\pi_{Id,Name,Age,Bonus=(Age−30)∗50}  (\sigma_{Age>30}  (People) )               (3.1)</script><p>与自身模型类似，关系代数不讨论这些操作符是怎么运行的，仅仅给出这些给定操作符如何产生结果.</p>
 <p>虽然关系型数据库是数据库世界最流行的方法，但也有其他的解决方案存在.比如，面向对象 [Bar96], 层次结构 [Bla98] 半结构化数据库 [BGvK+06] 等数据库用以进行特种数据管理任务。本文中我们主要精力集中在关系数据库以及关系数据库的查询处理，但是一些技术可以在其他的范式数据库中使用。</p>
 <h3 id="3-1-1-关系模型的实现"><a href="#3-1-1-关系模型的实现" class="headerlink" title="3.1.1 关系模型的实现"></a>3.1.1 关系模型的实现</h3><p>当关系模型是一个抽象的数学概念提出时，并没有一个现成的物理实现。在20世纪70年末与80年代初，真实世界中开始实用化该思想，比如，System R [CAB+81] 和Ingres [SHWK76]，这些系统引入的大量概念和设计还能在现存的关系数据库系统中找到。</p>
-<p><img src="images/Fig3-1.png" alt="Fig3-1"></p>
+<p><img src="/images/Fig3-1.png" alt></p>
 <h4 id="3-1-1-1-物理关系表示"><a href="#3-1-1-1-物理关系表示" class="headerlink" title="3.1.1.1 物理关系表示"></a>3.1.1.1 物理关系表示</h4><p>关系型数据库最通用的数据表示，将关系作为一个行的集合，每行对应一个元组。每个关系中的一个表将行通常以记录的形式一行接一行的存储，多行存储组成磁盘页。这种表示，就是所谓N元模型（N-ary storage model — NSM），如图3.1中间部分所示，另一种可选的表示方式是分解存储模型（ decomposed storage model， DSM  [CK85]）如图3.1最右部分表示。这里面，每个属性都在磁盘独立的区域中保存。</p>
 <h4 id="3-1-1-2-查询执行计划"><a href="#3-1-1-2-查询执行计划" class="headerlink" title="3.1.1.2 查询执行计划"></a>3.1.1.2 查询执行计划</h4><p>为了实现物理世界的关系运算功能，数据库通常有一组物理操作集，大致与相关逻辑操作符对应。通常不是一对一的对应，因为同一个逻辑操作符可以以多种方式实现，例如，逻辑的连接操作符可以以merge-join或者hash-jion实现，取决于数据的属性，资源可用性等等，多种操作符可以组成一个查询计划—-用户查询的物理表达。物理计划在 [Gra93]给出了一个各种物理查询计划的实现技术的概览。查询计划中，可用的有典型两种实现方式SKS02,<br>Chapter 13.7]:流水线方式与物化方式。分别在段3.3与段3.4描述了更多细节。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">SELECT l_returnflag,</span><br><span class="line">l_linestatus,</span><br><span class="line">sum(l_quantity) AS sum_qty,</span><br><span class="line">sum(l_extendedprice) AS sum_base_price,</span><br><span class="line">sum(l_extendedprice * (1 - l_discount)) AS sum_disc_price,</span><br><span class="line">sum(l_extendedprice * (1 - l_discount) * (1 + l_tax)) AS sum_charge,</span><br><span class="line">avg(l_quantity) AS avg_qty,</span><br><span class="line">avg(l_extendedprice) AS avg_price,</span><br><span class="line">avg(l_discount) AS avg_disc,</span><br><span class="line">count(*) AS count_order</span><br><span class="line">FROM lineitem</span><br><span class="line">WHERE l_shipdate &lt;= date ’1998-09-02’</span><br><span class="line">GROUP BY l_returnflag,</span><br><span class="line">l_linestatus</span><br><span class="line">ORDER BY l_returnflag,</span><br><span class="line">l_linestatus;</span><br></pre></td></tr></table></figure>
@@ -106,7 +106,7 @@ ukowski, M. (2009). Balancing vectorized query execution with bandwidth-optimize
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT Id, Name, Age, (Age - 30) * 50 AS Bonus</span><br><span class="line">FROM People</span><br><span class="line">WHERE Age &gt; 30</span><br></pre></td></tr></table></figure>
 <p>图3.2 展示更为复杂的SQL例子: Query 1 from the<br>TPC-H基准测试的 Query 1查询语句，本文通篇经常以该语句为例子.</p>
 <h2 id="3-2-DBMS架构"><a href="#3-2-DBMS架构" class="headerlink" title="3.2 DBMS架构"></a>3.2 DBMS架构</h2><p>通常关系型数据库组件如图3.3所示。事实上，最先进的DBMS产品显然更为复杂，常常包含几十个相互协作的模块，但是，通用的数据库还是以如下组件组成。</p>
-<p><img src="images/Fig3-3.png" alt></p>
+<p><img src="/images/Fig3-3.png" alt></p>
 <p><strong>客户端应用</strong> - DBMS的查询来自客户端，查询通常以高级查询语言表达—如SQL. 客户端使用DBMS底层的通信协议连接DBMS，也可以是高级的连接架构，如ODBC【Mic】 或者JDBC 【Suna】。此外，实际上应用与DBMS有额外的组件，比如特定实用工具如负载均衡，结果缓存。</p>
 <p><strong>查询解析器</strong> — 对客户端查询进行语法分析，构建查询语法树，提供查询内置表达。</p>
 <p><strong>查询改写器</strong> — 该组件对语法树进行语义正确性检查（比如，表是否存在，是否有访问权）并且将语法树转换为某种规范形式，通常是逻辑操作符组成的树，这些逻辑操作符很接近关系代数。该模块也执行一些额外的任务，比如定义视图，用以隐藏查询。</p>
@@ -125,21 +125,20 @@ ukowski, M. (2009). Balancing vectorized query execution with bandwidth-optimize
 <p><strong>超标量CPU利用率</strong> — 在段2.1.4所述，现代CPU有多个执行单元可以同时执行多个操作。数据库引擎，对大量元组执行同一个操作符，似乎符合这个特性。但是不幸的是，一次一元组的方式一个函数只能执行一个元组的一个操作执行，不足以保持多个执行单元保持忙碌。同时，重度分支多次函数导致CPU流水线频繁停滞。结果是，通常数据库代码只能得到非常低的IPC(每周期指令数)性能 [ADHW99].</p>
 <p><strong>编译器优化</strong> — 许多编译时优化技术，在解释型的一次一元组的方法中变得不可能。例如，由于动态方法调度（函数多态性）内联函数就不能使用，同样，一次处理一个值不允许许多性能关键（performance-critical）的应用进行循环优化—包括循环展开，循环流水化， 强度削弱（将乘除依据逻辑特点变成移位或加减法）以及自动SIMD化</p>
 <p><strong>数据容量</strong> — 通常使用N元元组表示方式，要求从磁盘读取所有表的属性需要保存在内存中，这就可能导致内存与磁盘带宽、如果查询没有使用这些属性，也会带来CPU cache的浪费。另外，记录表示元组通常包含一些元数据，导致磁盘利用率不理想。</p>
-<p><img src="images/T3-1.png" alt></p>
+<p><img src="/images/T3-1.png" alt></p>
 <p>上述迭代器模型特点导致传统数据库性能上两种主要低效。我们通过在mysql上执行TPC-H的查询1来展现。该查询一个包含大量元组的关系，然后执行简单的计算，最后汇总得到少量的聚集值。查询计划非常简单，并没有包含复杂的操作符比如join与磁盘分组聚合。在这种情况下，用户则希望大部分处理时间花在数据处理函数中，在表3.1中，基准测试中性能明细展示的恰好与人们期望的相反，实际操作数据的函数（黑体部分）仅占总时间不到10%。这就是展示第一种低效—-有很多指令与查询解释与元组操作有关，导致每条元组指令比率（instructions-per-tuple ratio）高，此外，每周期指令数（instructions-per-cycle）远低于超标量处理器可以达到的量。</p>
 <p>导致这种情况的原因是一次一元组算法无法应用多处理器单元，SIMD指令，以及很多编译器宽关键的优化技术。两种低效组合在一起，导致每元组CPU周期比率高，甚至简单的操作，可以达到数百甚至数千CPU周期。</p>
 <p>一次一元组模型给程序性能剖析与调优方面带来挑战。这是因为大部分的CPU时间分布在相对大量的代码上，包含数据处理函数，操作方法，元组列定位(元组导航)等等。在这种情况下，识别性能瓶颈并做显著的性能优化，是件很困难的事。</p>
 <p>虽然流水线模型有原生的性能处理问题，但是与物化方法相比，有一个重大优势将在下一节讨论—-可扩展性。因为next()函数每次只传递一个元组，所以在查询计划中不会有较大的中间结果。流水线模型可以高效处理任意规模的数据，保持这个特性也是段4.2所展示的新的迭代模型的关键设计目标之一。</p>
 <h2 id="3-4-MonetDB的一次一列的执行"><a href="#3-4-MonetDB的一次一列的执行" class="headerlink" title="3.4 MonetDB的一次一列的执行"></a>3.4 MonetDB的一次一列的执行</h2><p>MonetDB系统 [Bon02] 特为分析数据处理设计的。在这种情景下，查询负载通常由相对少量的查询组成。但是查询很复杂而且要处理大量的数据。要在此情景达到高性能，MonetDB在数据库系统多个层次提出了替代方案。MonetDB与传统系统关键的区别在于数据处理方式。与N元元组模型不同的是，MonetDB采取了分解存储模型的思想（DSM）【CK85】，使用基于二元关联表的代数（Binary Association Tables (BATs) [BK99]），这影响了存储层，查询语言与执行层的实现。在存储层中，BAT简化为两列表，头列与尾可以包含不同数据类型，如图3.5最左所示。</p>
-<p><img src="images/Fig5.png" alt></p>
+<p><img src="/images/Fig5.png" alt></p>
 <p>在数据库机器一文之前，提出过类似的数据组织方式，特别是向量机器 [TKK+88]. 同一元组的不同属性列通过对象id（oid）列相连接，组成与N元表相同的元组。等效于 [CK85]所提出的代理列。对于持久化数据，这个列通常是持续递增的序列数字，使用不会物理物化的特定的virtual-oid（void）类型列[BK99]，结果是 BAT通常使用单列保存。对于固定宽度的数据，该格式与简单数据数组等效。对于变长类型的数据在存储中则分为两个部分：一个包含实际数据的堆，一个固定长度数组存放每个元组的在堆中位置。</p>
 <p>存储层基于列的方法对IO性能与内存消耗有显著的影响。因为查询中实际用到的列从磁盘读取到，数据传输的量与N元存储模式相比，量小的多。特别对于列数量庞大的表非常重要，例如，数据挖掘应用。</p>
 <p>在处理层，MonetDB实现了一次一列的二元代数：每个操作符为输入列所有元组运行一次。并且输出为全物化的列集合。因此，查询计划不是操作符组成的流水线，而是消费数据列并生产数据列的执行语句序列。例如，段3.1.1.3所示的查询在Monet解释语言[BK99]（MIL）中,如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sel_age := people_age.select(30, nil);</span><br><span class="line">sel_id := sel_age.mirror().join(people_age);</span><br><span class="line">sel_name := sel_age.mirror().join(people_name);</span><br><span class="line">tmp := [-](sel_age, 30);</span><br><span class="line">sel_bonus := [*](50, tmp);</span><br></pre></td></tr></table></figure>
-<p>The data flow for this query plan is presented in Figure 3.5. The resulting sel *<br>BATs constitute the final result. A more complex MIL example is presented in<br>the left-most column of Figure 3.6, which shows the MIL code for the TPC-H<br>Query 1.</p>
 <p>这个执行计划所表示的数据流如图3.5所示，sel _*  BAT组就是最后的结果。一个更为复杂的MIL例子如图3.6最左列所示。</p>
 <p>MonetDB操作符的实现基于无自由度原则。每个组合任务（例如，select ，sort），输入数据类型（例如，整型，字符串）与属性（例如，已排序，可空值）均有一个指定的简单例程创建。注意这种方法在N元模型中不可行，因为组合数太高了。但是可以在二元模型中维护。当操作符调用，则进行输入数据类型版本匹配，选择属性，并执行。因为操作符的输入通常直接存为值数组，并且整个输入仅处理一次，许多操作符可以归结为对数组的简单循环。例如，从一个[void ,int ] 的BAT中找出大于某个常量的元组并切生成新的[oid, void]结果如下所示：</p>
-<p><img src="images/Fig3-6.png" alt></p>
+<p><img src="/images/Fig3-6.png" alt></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">int uselect_bt_void_int_bat_int_const(oid *output, int *input, int value, int size) &#123;</span><br><span class="line">  oid i;</span><br><span class="line">  int j = 0;</span><br><span class="line">  for (i = 0; i &lt; size; i++)</span><br><span class="line">    if (input[i] &gt; value)</span><br><span class="line">       output[j++] = i;</span><br><span class="line">  return j;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>当然，手动维护这些操作符的所有可能是不可行的。MonetDB激进地使用宏拓展，将操作符模版转为几十甚至数百因数据类型不同，属性不同而产生的版本。虽然这些方法显著增大了程序大小，但是这是影响执行性能的非常有用属性：</p>
 <p><strong>指令Cache</strong> — 虽然总体代码量庞大，装载给定函数的开销，分摊到这个操作符的整个数据输入，每个数据函数开销，在绝大情况下都可以忽略不计。</p>
@@ -154,7 +153,7 @@ ukowski, M. (2009). Balancing vectorized query execution with bandwidth-optimize
     </div>
     
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/30/基于现代硬件的数据库/" data-id="cjxluwy9o0003c8flky7bjeoq" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/06/30/基于现代硬件的数据库/" data-id="cjxlw8vhr0004jkflua55uekr" class="article-share-link">Share</a>
       
       
     </footer>
@@ -192,7 +191,7 @@ ukowski, M. (2009). Balancing vectorized query execution with bandwidth-optimize
     </div>
     
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/30/about/" data-id="cjxluwy8h0000c8fluz76dhsr" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/06/30/about/" data-id="cjxlw8vgo0001jkflcjwka6zp" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/“about”/">“about”</a></li></ul>
