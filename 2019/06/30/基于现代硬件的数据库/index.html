@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>基于现代硬件的数据库 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="翻译于 Citation for published version (APA): ukowski, M. (2009). Balancing vectorized query execution with bandwidth-optimized storage 3 基于现代硬件的数据库2018 数据库管理系统(DBMS) 给应用程序提供数据处理任务的一个高度抽象。提供通用的接口用以操作数据。同时">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于现代硬件的数据库">
+<meta property="og:url" content="http://yoursite.com/2019/06/30/基于现代硬件的数据库/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="翻译于 Citation for published version (APA): ukowski, M. (2009). Balancing vectorized query execution with bandwidth-optimized storage 3 基于现代硬件的数据库2018 数据库管理系统(DBMS) 给应用程序提供数据处理任务的一个高度抽象。提供通用的接口用以操作数据。同时">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/2019/06/30/基于现代硬件的数据库/images/Fig3-1.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/30/基于现代硬件的数据库/images/Fig3-3.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/30/基于现代硬件的数据库/images/T3-1.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/30/基于现代硬件的数据库/images/Fig5.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/30/基于现代硬件的数据库/images/Fig3-6.png">
+<meta property="og:updated_time" content="2019-07-02T13:26:47.361Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于现代硬件的数据库">
+<meta name="twitter:description" content="翻译于 Citation for published version (APA): ukowski, M. (2009). Balancing vectorized query execution with bandwidth-optimized storage 3 基于现代硬件的数据库2018 数据库管理系统(DBMS) 给应用程序提供数据处理任务的一个高度抽象。提供通用的接口用以操作数据。同时">
+<meta name="twitter:image" content="http://yoursite.com/2019/06/30/基于现代硬件的数据库/images/Fig3-1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+</head>
+</html>
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-基于现代硬件的数据库" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/06/30/基于现代硬件的数据库/" class="article-date">
+  <time datetime="2019-06-30T08:51:07.000Z" itemprop="datePublished">2019-06-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      基于现代硬件的数据库
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>翻译于</p>
+<p><code>Citation for published version (APA):
+ukowski, M. (2009). Balancing vectorized query execution with bandwidth-optimized storage</code></p>
+<h1 id="3-基于现代硬件的数据库"><a href="#3-基于现代硬件的数据库" class="headerlink" title="3 基于现代硬件的数据库"></a>3 基于现代硬件的数据库</h1><p>2018</p>
+<p>数据库管理系统(DBMS) 给应用程序提供数据处理任务的一个高度抽象。提供通用的接口用以操作数据。同时提供了并行控制、事务管理、故障恢复、和一致性检测的特性。此外，它们隐藏了使用机器的硬件特性，使得应用程序可以在各种平台上使用。</p>
+<p>本章讨论了DBMS的主要特性，是本文关注的重要元素。在段3.1中，我们简略描述关系数据库模型与关系代数，这些理论是目前大部分数据库引擎的基础。段3.2中 描述了DBMS典型架构，简略介绍了重要组成部分。其中两个组成— 查询执行和存储管理— 是本文中最感兴趣的部分，本章中我们展现两种实现的不同方法，两者均在本文后续章节提到。首先，段3.3讨论最通用的实现方法，是基于N元（N-ary）存储模型之上的迭代执行模型。然后，在段3.4展示的是完全不同的方法，已经在MonetDB系统中使用，它使用的是一种基于分解（列）存储模型全物化代数(fully-materialized<br>algebra )。 两种架构，自身都能某些地方优于对方。但都没有完全使用现代计算机硬件的的可能性。为了改善这种情况，在3.5节中提出多种优化技巧。</p>
+<h2 id="3-1-关系模型"><a href="#3-1-关系模型" class="headerlink" title="3.1 关系模型"></a>3.1 关系模型</h2><p>自从1970年后期，关系模型是数据库中最流行的模型。每个关系是N域笛卡尔积的子集。一个关系有一组元组组成，每个元组包含N个属性值，每个属性仅有一个值。</p>
+<p>典型地，关系可以用表可视化表示。元组为行，属性为列，在图3.1中表示。然而，这个模型自身并没有加入很热特殊的物理数据表示。实际上，关系的定义是乱序的。</p>
+<p>关系代数中定义了一组操作符定义关系操作，基本的操作有投影(π), 选择(σ)，聚类（G）和笛卡尔积(×) 以及各种联结操作(*).</p>
+<p>比如，使用图3.1中的People，计算年龄超过30岁的人的奖金,可以使用如下关系查询:</p>
+<script type="math/tex; mode=display">\pi_{Id,Name,Age,Bonus=(Age−30)∗50}  (\sigma_{Age>30}  (People) )               (3.1)</script><p>与自身模型类似，关系代数不讨论这些操作符是怎么运行的，仅仅给出这些给定操作符如何产生结果.</p>
+<p>虽然关系型数据库是数据库世界最流行的方法，但也有其他的解决方案存在.比如，面向对象 [Bar96], 层次结构 [Bla98] 半结构化数据库 [BGvK+06] 等数据库用以进行特种数据管理任务。本文中我们主要精力集中在关系数据库以及关系数据库的查询处理，但是一些技术可以在其他的范式数据库中使用。</p>
+<h3 id="3-1-1-关系模型的实现"><a href="#3-1-1-关系模型的实现" class="headerlink" title="3.1.1 关系模型的实现"></a>3.1.1 关系模型的实现</h3><p>当关系模型是一个抽象的数学概念提出时，并没有一个现成的物理实现。在20世纪70年末与80年代初，真实世界中开始实用化该思想，比如，System R [CAB+81] 和Ingres [SHWK76]，这些系统引入的大量概念和设计还能在现存的关系数据库系统中找到。</p>
+<p><img src="images/Fig3-1.png" alt="Fig3-1"></p>
+<h4 id="3-1-1-1-物理关系表示"><a href="#3-1-1-1-物理关系表示" class="headerlink" title="3.1.1.1 物理关系表示"></a>3.1.1.1 物理关系表示</h4><p>关系型数据库最通用的数据表示，将关系作为一个行的集合，每行对应一个元组。每个关系中的一个表将行通常以记录的形式一行接一行的存储，多行存储组成磁盘页。这种表示，就是所谓N元模型（N-ary storage model — NSM），如图3.1中间部分所示，另一种可选的表示方式是分解存储模型（ decomposed storage model， DSM  [CK85]）如图3.1最右部分表示。这里面，每个属性都在磁盘独立的区域中保存。</p>
+<h4 id="3-1-1-2-查询执行计划"><a href="#3-1-1-2-查询执行计划" class="headerlink" title="3.1.1.2 查询执行计划"></a>3.1.1.2 查询执行计划</h4><p>为了实现物理世界的关系运算功能，数据库通常有一组物理操作集，大致与相关逻辑操作符对应。通常不是一对一的对应，因为同一个逻辑操作符可以以多种方式实现，例如，逻辑的连接操作符可以以merge-join或者hash-jion实现，取决于数据的属性，资源可用性等等，多种操作符可以组成一个查询计划—-用户查询的物理表达。物理计划在 [Gra93]给出了一个各种物理查询计划的实现技术的概览。查询计划中，可用的有典型两种实现方式SKS02,<br>Chapter 13.7]:流水线方式与物化方式。分别在段3.3与段3.4描述了更多细节。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">SELECT l_returnflag,</span><br><span class="line">l_linestatus,</span><br><span class="line">sum(l_quantity) AS sum_qty,</span><br><span class="line">sum(l_extendedprice) AS sum_base_price,</span><br><span class="line">sum(l_extendedprice * (1 - l_discount)) AS sum_disc_price,</span><br><span class="line">sum(l_extendedprice * (1 - l_discount) * (1 + l_tax)) AS sum_charge,</span><br><span class="line">avg(l_quantity) AS avg_qty,</span><br><span class="line">avg(l_extendedprice) AS avg_price,</span><br><span class="line">avg(l_discount) AS avg_disc,</span><br><span class="line">count(*) AS count_order</span><br><span class="line">FROM lineitem</span><br><span class="line">WHERE l_shipdate &lt;= date ’1998-09-02’</span><br><span class="line">GROUP BY l_returnflag,</span><br><span class="line">l_linestatus</span><br><span class="line">ORDER BY l_returnflag,</span><br><span class="line">l_linestatus;</span><br></pre></td></tr></table></figure>
+<p><strong>Figure 3.2: TPC-H Query 1</strong></p>
+<h4 id="3-1-1-3-查询语言"><a href="#3-1-1-3-查询语言" class="headerlink" title="3.1.1.3 查询语言"></a>3.1.1.3 查询语言</h4><p>DBMS通常提供通过提供高级语言（说明型）， 并把高级语言转换为实际查询计划，来隐藏关系代数的命令型属性。关系数据库的实际标准是结构化查询语言(SQL) [CB74, EKM+04]，使用声明语法来表达查询，并且接近自然语言—-英语。例如段3.1的可以使用如下SQL语句表达：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT Id, Name, Age, (Age - 30) * 50 AS Bonus</span><br><span class="line">FROM People</span><br><span class="line">WHERE Age &gt; 30</span><br></pre></td></tr></table></figure>
+<p>图3.2 展示更为复杂的SQL例子: Query 1 from the<br>TPC-H基准测试的 Query 1查询语句，本文通篇经常以该语句为例子.</p>
+<h2 id="3-2-DBMS架构"><a href="#3-2-DBMS架构" class="headerlink" title="3.2 DBMS架构"></a>3.2 DBMS架构</h2><p>通常关系型数据库组件如图3.3所示。事实上，最先进的DBMS产品显然更为复杂，常常包含几十个相互协作的模块，但是，通用的数据库还是以如下组件组成。</p>
+<p><img src="images/Fig3-3.png" alt></p>
+<p><strong>客户端应用</strong> - DBMS的查询来自客户端，查询通常以高级查询语言表达—如SQL. 客户端使用DBMS底层的通信协议连接DBMS，也可以是高级的连接架构，如ODBC【Mic】 或者JDBC 【Suna】。此外，实际上应用与DBMS有额外的组件，比如特定实用工具如负载均衡，结果缓存。</p>
+<p><strong>查询解析器</strong> — 对客户端查询进行语法分析，构建查询语法树，提供查询内置表达。</p>
+<p><strong>查询改写器</strong> — 该组件对语法树进行语义正确性检查（比如，表是否存在，是否有访问权）并且将语法树转换为某种规范形式，通常是逻辑操作符组成的树，这些逻辑操作符很接近关系代数。该模块也执行一些额外的任务，比如定义视图，用以隐藏查询。</p>
+<p><strong>查询优化器</strong>   — 该组件主要任务重新编排查询树，目的是让执行查询得出结果所花的时间最小。并且使用对应的物理操作符（比如hash-join操作符）替换逻辑操作符（比如，通用的join操作符），来构造物理查询计划。该模块往往高度复杂，并且对查询总体执行时间影响巨大。例如，一个错误的操作符顺序或者错误的操作符选择，会导致某阶段的处理计算量爆炸。因为这个差的执行计划，最快的查询执行器也不能在满意的时间处理完给定的计划。</p>
+<p><strong>查询执行器</strong> —该组件是查询处理的核心。他接受物理查询计划，从存储层获取数据，并处理的所有特定步骤，计算结果返回给客户端。</p>
+<p><strong>buffer管理器/存储模块</strong> —管理持久介质的数据存储、数据访问与内存缓存。通常情况下， 也处理更新，管理事务，以及灾难恢复，日志，锁等等。然而，这些主题不在本文中涉及，我们只关注于数据存储与访问。</p>
+<p>这些组件中，在本文中最重要的两个组件是：查询执行与存储层。后面两节中继续讨论两种查询执行层的实现方法，基于两种不同的原则：流水线与物化 [SKS02, Chapter 13.7]，首先，段3.3我们分析典型的基于流水线迭代器查询处理，应用与N元元组存储模型。随后，段3.4我们讨论MonetDB，专注于全物化的内存查询执行器模型，以及基于列的存储模型。</p>
+<h2 id="3-3-一次一元组迭代器模型"><a href="#3-3-一次一元组迭代器模型" class="headerlink" title="3.3 一次一元组迭代器模型"></a>3.3 一次一元组迭代器模型</h2><p>大部分数据库引擎在查询执行层使用的迭代器模型[Gra94].在这种模型中，查询计划是一组以某种拓扑连接的关系操作符组成，通常以树的形式，也可以使用有向无环图(DAG) （比如，并行执行计划）甚至是有环图[Waa02].操作符以“流水线”的方式沟通，主要用三种主要的接口函数来实现：open() 函数初始化操作符与子节点，next()让操作符返回下一部分数据给调用者，最后，close()函数完成处理并释放资源。通常情况下，在next()调用中，以NSM-based记录（N元存储模型）形式返回一个元组。这个pull的模式就是一次一元组迭代器模型。图3.4展示了段3.1的操作符树。以如下步骤进行：首先，用户（客户端应用）要求顶层操作符（Project—-投影）的下一个元组，投影则向子节点（Select）请求，然后再转向下层子节点（Scan），Scan从表中查出下一条元组，然后返回给Select，Select检查元组是否符合其谓词条件，如果符合，发送给Project，否则，再次向Scan请求下一个元组。Project为每条元组计算额外的列，并且返回新的元组给用户。当Scan断定没有新的元组之后，发送流结束标志流向整个流水线，最后完成处理过程。</p>
+<p>使用如下Select的next伪代码，更能反应操作符所做的过程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Tuple Select::next() &#123;</span><br><span class="line">while (true) &#123;</span><br><span class="line">  Tuple candidate = child-&gt;next();</span><br><span class="line">  if (candidate == EndOfStream)</span><br><span class="line">       return EndOfStream;</span><br><span class="line">  if (condition-&gt;check(candidate))</span><br><span class="line">       return candidate;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3-3-1-一次一元组模型的性能特征"><a href="#3-3-1-一次一元组模型的性能特征" class="headerlink" title="3.3.1 一次一元组模型的性能特征"></a>3.3.1 一次一元组模型的性能特征</h3><p>一次一元组模型十分优美易懂，并且相对容易实现。这种模型最重要的性能效率特征是，每个元组都进行了多次函数调用。在我们的例子中，至少有多次next()函数调用。在select中调用，用以估算条件，在Project中调用，用以计算新的属性值。结果是，每个操作符状态，以及使用操作符的代码会被频繁访问。这种特点导致在如下方面有重大的性能上的劣势：</p>
+<p><strong>CPU指令Cache</strong> — 如果执行计划有很多种不同的操作符，其组合的指令内存占用相对于CPU的指令Cache(I-Cache)太大了，无法装下。当CPU为每条元组中的各个操作符直接切换上下文，如果I-Cache不够大，则每次给定的代码被访问，都会出现Cache未命中（Cache missing）的情况。</p>
+<p><strong>计划与数据Cache</strong> – 每个关系操作符实例都要保持自身的状态而消耗一些内存。这些状态在执行next()函数是必要的。在复杂计划中（甚至在少量的操作符组成的计划中），或者操作符都保持大量的状态，这些数据在CPU的D-Cache（数据Cache）装不下，导致Cache未命中。</p>
+<p><strong>函数调用开销</strong> — 操作符之间的交互，以及许多数据操作符都通过调用适当的函数或者对象的方法来实现，每次操作符迭代，多次进行此类函数调用。因此执行函数调用的代价，特别是动态调度（例如数据依赖）的函数（通常所说的多态性函数）。往往需要数十个CPU周期，特别多个参数传递，则其开销更为明显。</p>
+<p><strong>元组操作</strong> —由于元组以属性记录的方式组织，获取特定值通常需要额外步骤用来获取在记录的位置。这个过程几乎在每条元组中重复。</p>
+<p><strong>超标量CPU利用率</strong> — 在段2.1.4所述，现代CPU有多个执行单元可以同时执行多个操作。数据库引擎，对大量元组执行同一个操作符，似乎符合这个特性。但是不幸的是，一次一元组的方式一个函数只能执行一个元组的一个操作执行，不足以保持多个执行单元保持忙碌。同时，重度分支多次函数导致CPU流水线频繁停滞。结果是，通常数据库代码只能得到非常低的IPC(每周期指令数)性能 [ADHW99].</p>
+<p><strong>编译器优化</strong> — 许多编译时优化技术，在解释型的一次一元组的方法中变得不可能。例如，由于动态方法调度（函数多态性）内联函数就不能使用，同样，一次处理一个值不允许许多性能关键（performance-critical）的应用进行循环优化—包括循环展开，循环流水化， 强度削弱（将乘除依据逻辑特点变成移位或加减法）以及自动SIMD化</p>
+<p><strong>数据容量</strong> — 通常使用N元元组表示方式，要求从磁盘读取所有表的属性需要保存在内存中，这就可能导致内存与磁盘带宽、如果查询没有使用这些属性，也会带来CPU cache的浪费。另外，记录表示元组通常包含一些元数据，导致磁盘利用率不理想。</p>
+<p><img src="images/T3-1.png" alt></p>
+<p>上述迭代器模型特点导致传统数据库性能上两种主要低效。我们通过在mysql上执行TPC-H的查询1来展现。该查询一个包含大量元组的关系，然后执行简单的计算，最后汇总得到少量的聚集值。查询计划非常简单，并没有包含复杂的操作符比如join与磁盘分组聚合。在这种情况下，用户则希望大部分处理时间花在数据处理函数中，在表3.1中，基准测试中性能明细展示的恰好与人们期望的相反，实际操作数据的函数（黑体部分）仅占总时间不到10%。这就是展示第一种低效—-有很多指令与查询解释与元组操作有关，导致每条元组指令比率（instructions-per-tuple ratio）高，此外，每周期指令数（instructions-per-cycle）远低于超标量处理器可以达到的量。</p>
+<p>导致这种情况的原因是一次一元组算法无法应用多处理器单元，SIMD指令，以及很多编译器宽关键的优化技术。两种低效组合在一起，导致每元组CPU周期比率高，甚至简单的操作，可以达到数百甚至数千CPU周期。</p>
+<p>一次一元组模型给程序性能剖析与调优方面带来挑战。这是因为大部分的CPU时间分布在相对大量的代码上，包含数据处理函数，操作方法，元组列定位(元组导航)等等。在这种情况下，识别性能瓶颈并做显著的性能优化，是件很困难的事。</p>
+<p>虽然流水线模型有原生的性能处理问题，但是与物化方法相比，有一个重大优势将在下一节讨论—-可扩展性。因为next()函数每次只传递一个元组，所以在查询计划中不会有较大的中间结果。流水线模型可以高效处理任意规模的数据，保持这个特性也是段4.2所展示的新的迭代模型的关键设计目标之一。</p>
+<h2 id="3-4-MonetDB的一次一列的执行"><a href="#3-4-MonetDB的一次一列的执行" class="headerlink" title="3.4 MonetDB的一次一列的执行"></a>3.4 MonetDB的一次一列的执行</h2><p>MonetDB系统 [Bon02] 特为分析数据处理设计的。在这种情景下，查询负载通常由相对少量的查询组成。但是查询很复杂而且要处理大量的数据。要在此情景达到高性能，MonetDB在数据库系统多个层次提出了替代方案。MonetDB与传统系统关键的区别在于数据处理方式。与N元元组模型不同的是，MonetDB采取了分解存储模型的思想（DSM）【CK85】，使用基于二元关联表的代数（Binary Association Tables (BATs) [BK99]），这影响了存储层，查询语言与执行层的实现。在存储层中，BAT简化为两列表，头列与尾可以包含不同数据类型，如图3.5最左所示。</p>
+<p><img src="images/Fig5.png" alt></p>
+<p>在数据库机器一文之前，提出过类似的数据组织方式，特别是向量机器 [TKK+88]. 同一元组的不同属性列通过对象id（oid）列相连接，组成与N元表相同的元组。等效于 [CK85]所提出的代理列。对于持久化数据，这个列通常是持续递增的序列数字，使用不会物理物化的特定的virtual-oid（void）类型列[BK99]，结果是 BAT通常使用单列保存。对于固定宽度的数据，该格式与简单数据数组等效。对于变长类型的数据在存储中则分为两个部分：一个包含实际数据的堆，一个固定长度数组存放每个元组的在堆中位置。</p>
+<p>存储层基于列的方法对IO性能与内存消耗有显著的影响。因为查询中实际用到的列从磁盘读取到，数据传输的量与N元存储模式相比，量小的多。特别对于列数量庞大的表非常重要，例如，数据挖掘应用。</p>
+<p>在处理层，MonetDB实现了一次一列的二元代数：每个操作符为输入列所有元组运行一次。并且输出为全物化的列集合。因此，查询计划不是操作符组成的流水线，而是消费数据列并生产数据列的执行语句序列。例如，段3.1.1.3所示的查询在Monet解释语言[BK99]（MIL）中,如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sel_age := people_age.select(30, nil);</span><br><span class="line">sel_id := sel_age.mirror().join(people_age);</span><br><span class="line">sel_name := sel_age.mirror().join(people_name);</span><br><span class="line">tmp := [-](sel_age, 30);</span><br><span class="line">sel_bonus := [*](50, tmp);</span><br></pre></td></tr></table></figure>
+<p>The data flow for this query plan is presented in Figure 3.5. The resulting sel *<br>BATs constitute the final result. A more complex MIL example is presented in<br>the left-most column of Figure 3.6, which shows the MIL code for the TPC-H<br>Query 1.</p>
+<p>这个执行计划所表示的数据流如图3.5所示，sel _*  BAT组就是最后的结果。一个更为复杂的MIL例子如图3.6最左列所示。</p>
+<p>MonetDB操作符的实现基于无自由度原则。每个组合任务（例如，select ，sort），输入数据类型（例如，整型，字符串）与属性（例如，已排序，可空值）均有一个指定的简单例程创建。注意这种方法在N元模型中不可行，因为组合数太高了。但是可以在二元模型中维护。当操作符调用，则进行输入数据类型版本匹配，选择属性，并执行。因为操作符的输入通常直接存为值数组，并且整个输入仅处理一次，许多操作符可以归结为对数组的简单循环。例如，从一个[void ,int ] 的BAT中找出大于某个常量的元组并切生成新的[oid, void]结果如下所示：</p>
+<p><img src="images/Fig3-6.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">int uselect_bt_void_int_bat_int_const(oid *output, int *input, int value, int size) &#123;</span><br><span class="line">  oid i;</span><br><span class="line">  int j = 0;</span><br><span class="line">  for (i = 0; i &lt; size; i++)</span><br><span class="line">    if (input[i] &gt; value)</span><br><span class="line">       output[j++] = i;</span><br><span class="line">  return j;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然，手动维护这些操作符的所有可能是不可行的。MonetDB激进地使用宏拓展，将操作符模版转为几十甚至数百因数据类型不同，属性不同而产生的版本。虽然这些方法显著增大了程序大小，但是这是影响执行性能的非常有用属性：</p>
+<p><strong>指令Cache</strong> — 虽然总体代码量庞大，装载给定函数的开销，分摊到这个操作符的整个数据输入，每个数据函数开销，在绝大情况下都可以忽略不计。</p>
+<p><strong>计划-数据Cache</strong> — 因为任意时刻只有一个操作符运行（只有单个处理），其自身的状态可以完全利用CPU的cache。MonetDB是一个在Cache敏感（ cache-conscious）数据库方面做了一些前瞻的工作。并且提供了很多cache-conscious算法[MBK02, MBNK04].</p>
+<p><strong>函数调用开销</strong> — 对于大部分的操作符，没有每元组函数调用，因此函数调用的开销可以忽略不计。</p>
+<p><strong>元组操作</strong> — 数据通常以持续元组集合保存，相当与C语言的数组。因此，值访问是直接的，不需要任何程序解释。</p>
+<p><strong>超标量CPU利用率</strong> — MonetDB操作符的代码实现往往没有使用函数调用，因此更少的分支，结果是在现代的CPU中可以运行良好。虽然代价高昂的内存访问往往会妨碍性能。</p>
+<p><strong>编译优化</strong> — MonetDB操作符代码非常简单，大量自动的编译优化可以被应用。</p>
+<p><strong>数据容量</strong> — 因为MonetDB用户使用列式数据表示，只有使用到的列才会从磁盘传输到内存，此外，数据在稠密的数组中封装，不再使用NSM（N元存储模型）的记录结构表示。因此存储要求会更小</p>
+
+      
+    </div>
+    
+	<! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+		   欣赏此文？求鼓励，求支持！
+        </span>
+        <br>
+      </div>  
+	<div id="donate_guide" class="donate_bar center hidden" >
+		<!-- 支付宝打赏图案 -->
+		<img src="/images/zhifubao.png" alt="支付宝打赏"> 
+		<!-- 微信打赏图案 -->
+		<img src="/images/weixin.jpg" alt="微信打赏">  
+    </div>
+	<script type="text/javascript">
+		document.getElementById('btn_donate').onclick = function(){
+			$('#donate_board').addClass('hidden');
+			$('#donate_guide').removeClass('hidden');
+		}
+	</script>
+</div>
+<! -- 添加捐赠图标 -->
+	
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/06/30/基于现代硬件的数据库/" data-id="cjxluwy9o0003c8flky7bjeoq" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/06/30/about/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">关于</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/“about”/">“about”</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/“about”/" style="font-size: 10px;">“about”</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/06/30/基于现代硬件的数据库/">基于现代硬件的数据库</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/30/about/">关于</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
