@@ -62,6 +62,52 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-如何从0写编译器" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/07/28/如何从0写编译器/" class="article-date">
+  <time datetime="2019-07-28T01:38:39.000Z" itemprop="datePublished">2019-07-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/07/28/如何从0写编译器/">如何从0写编译器</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="如何从0写编译器"><a href="#如何从0写编译器" class="headerlink" title="如何从0写编译器"></a>如何从0写编译器</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>​        编译原理这门课程较为复杂，一般情况下，学完编译原理不见得能自己写出一个语言的解释器，更不用说编译器了。这里给出一个python版的简单解释器与编译器，代码量很小，便于理解编译原理的编译过程。之所以用python，是因为python脚本语言，方便于边写边涂改。</p>
+<p>​        本文中，语法分析使用rply库，代码生成使用llvmlite， python版本为3.7.0, rply库与llvmlite安装如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install rply</span><br><span class="line">pip install llvmlite==0.26.0</span><br></pre></td></tr></table></figure></p>
+<p>​        LLVM官方有Kaleidoscope这个例子也可以用来学习, 这个例子用C++写的，LLVM6版本的使用C++11标准。但是并不推荐使用C++ 来进行，但是并不推荐使用C++来实现文中的例子。LLVM官方的文档并不太友好，内容相对代码比较滞后。如果要学习LLVM的代码生成，要深入研究LLVM的Kaleidoscope例子也LLVM的源码，另外，它也使用了大量的C++模版，使得编译很慢。在我的电脑中，编译LLVM库需要6个小时，在一个LLVM代码生成例子做少量修改，编译也要十几分钟，此外C++调试错误定位也需要大量的时间。所以，对于不知道如何写编程语言来说，python来实现更为合适，它允许你随时修改立刻执行，方便你做小实验，不需要你要编译器的全局观，或者某种哲学。发现问题，或者有新想法可以立刻加进去。PHP 的创造者 Rasmus Lerdorf 就说过:”我根本不知道该怎么编写一门编程语言，在我觉得需要时，就往里面加东西。” ，然而这样做出来的PHP是世界最好的语言:-)</p>
+<h3 id="rply"><a href="#rply" class="headerlink" title="rply"></a>rply</h3><p>PLY是python版的词法与语法分析工具，相当于C语言环境下的lex与yacc。rply是在ply做了一个很好的封装，提供了一组更为好用的API。</p>
+<h3 id="llvmlite"><a href="#llvmlite" class="headerlink" title="llvmlite"></a>llvmlite</h3><p>llvmlite是封装了LLVM库的python包，lite表示它没有完全支持LLVM，但是对于我们来说够用了。具体文档参见</p>
+<p><a href="https://llvmlite.readthedocs.io/en/latest/" target="_blank" rel="noopener">https://llvmlite.readthedocs.io/en/latest/</a></p>
+<h3 id="目标语言"><a href="#目标语言" class="headerlink" title="目标语言"></a>目标语言</h3><p>选择要实现的语言是foxbase语言，曾经比较火，但目前foxbase已经成为历史。语言具体规格可以参考<a href="https://github.com/acekingke/foxbase_inCloud" target="_blank" rel="noopener">foxbase_incloud</a>  ,里面”?”是foxbase的打印语句。</p>
+<h2 id="最终结果"><a href="#最终结果" class="headerlink" title="最终结果"></a>最终结果</h2><p>解释型的foxbase语言实现参见<a href="https://github.com/acekingke/foxbase_inCloud" target="_blank" rel="noopener">https://github.com/acekingke/foxbase_inCloud</a></p>
+<p>编译型foxbase语言实现参见<a href="https://github.com/acekingke/foxbase_compiler" target="_blank" rel="noopener">https://github.com/acekingke/foxbase_compiler</a></p>
+<h1 id><a href="#" class="headerlink" title=" "></a> </h1>
+      
+    </div>
+    
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/07/28/如何从0写编译器/" data-id="cjyp7qmnn0000d4fl69o7wvwe" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-现代硬件的高效查询计划的高效编译" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/07/08/现代硬件的高效查询计划的高效编译/" class="article-date">
@@ -271,7 +317,7 @@
     </div>
     
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/08/现代硬件的高效查询计划的高效编译/" data-id="cjy43y8gw0005dkflnqp53td3" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/07/08/现代硬件的高效查询计划的高效编译/" data-id="cjyp7othl000518flmvnocqr6" class="article-share-link">Share</a>
       
       
     </footer>
@@ -386,7 +432,7 @@ P(k) = \frac{\lambda^k}{k!}\cdot\left(\lim\limits_{n \to \infty}(1-\frac{\lambda
     </div>
     
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/02/神奇的自然底数e/" data-id="cjy43y8f50001dkfl7csup75r" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/07/02/神奇的自然底数e/" data-id="cjyp7otg3000118fldeliaw3p" class="article-share-link">Share</a>
       
       
     </footer>
@@ -487,7 +533,7 @@ ukowski, M. (2009). Balancing vectorized query execution with bandwidth-optimize
     </div>
     
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/30/基于现代硬件的数据库/" data-id="cjy43y8gk0004dkfll60povzs" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/06/30/基于现代硬件的数据库/" data-id="cjyp7oth8000418fl4w7itsdc" class="article-share-link">Share</a>
       
       
     </footer>
@@ -525,7 +571,7 @@ ukowski, M. (2009). Balancing vectorized query execution with bandwidth-optimize
     </div>
     
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/30/about/" data-id="cjy43y8et0000dkfli4wqv7na" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/06/30/about/" data-id="cjyp7otfm000018fl94xthxn2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/“about”/">“about”</a></li></ul>
@@ -579,6 +625,10 @@ ukowski, M. (2009). Balancing vectorized query execution with bandwidth-optimize
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/07/28/如何从0写编译器/">如何从0写编译器</a>
+          </li>
         
           <li>
             <a href="/2019/07/08/现代硬件的高效查询计划的高效编译/">现代硬件的高效查询计划的高效编译</a>

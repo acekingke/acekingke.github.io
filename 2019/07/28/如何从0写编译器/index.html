@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>如何从0写编译器 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="如何从0写编译器简介​        编译原理这门课程较为复杂，一般情况下，学完编译原理不见得能自己写出一个语言的解释器，更不用说编译器了。这里给出一个python版的简单解释器与编译器，代码量很小，便于理解编译原理的编译过程。之所以用python，是因为python脚本语言，方便于边写边涂改。 ​        本文中，语法分析使用rply库，代码生成使用llvmlite， python版本为3">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何从0写编译器">
+<meta property="og:url" content="http://yoursite.com/2019/07/28/如何从0写编译器/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="如何从0写编译器简介​        编译原理这门课程较为复杂，一般情况下，学完编译原理不见得能自己写出一个语言的解释器，更不用说编译器了。这里给出一个python版的简单解释器与编译器，代码量很小，便于理解编译原理的编译过程。之所以用python，是因为python脚本语言，方便于边写边涂改。 ​        本文中，语法分析使用rply库，代码生成使用llvmlite， python版本为3">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-07-30T02:39:25.563Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何从0写编译器">
+<meta name="twitter:description" content="如何从0写编译器简介​        编译原理这门课程较为复杂，一般情况下，学完编译原理不见得能自己写出一个语言的解释器，更不用说编译器了。这里给出一个python版的简单解释器与编译器，代码量很小，便于理解编译原理的编译过程。之所以用python，是因为python脚本语言，方便于边写边涂改。 ​        本文中，语法分析使用rply库，代码生成使用llvmlite， python版本为3">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+</head>
+</html>
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-如何从0写编译器" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/07/28/如何从0写编译器/" class="article-date">
+  <time datetime="2019-07-28T01:38:39.000Z" itemprop="datePublished">2019-07-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      如何从0写编译器
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="如何从0写编译器"><a href="#如何从0写编译器" class="headerlink" title="如何从0写编译器"></a>如何从0写编译器</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>​        编译原理这门课程较为复杂，一般情况下，学完编译原理不见得能自己写出一个语言的解释器，更不用说编译器了。这里给出一个python版的简单解释器与编译器，代码量很小，便于理解编译原理的编译过程。之所以用python，是因为python脚本语言，方便于边写边涂改。</p>
+<p>​        本文中，语法分析使用rply库，代码生成使用llvmlite， python版本为3.7.0, rply库与llvmlite安装如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install rply</span><br><span class="line">pip install llvmlite==0.26.0</span><br></pre></td></tr></table></figure></p>
+<p>​        LLVM官方有Kaleidoscope这个例子也可以用来学习, 这个例子用C++写的，LLVM6版本的使用C++11标准。但是并不推荐使用C++ 来进行，但是并不推荐使用C++来实现文中的例子。LLVM官方的文档并不太友好，内容相对代码比较滞后。如果要学习LLVM的代码生成，要深入研究LLVM的Kaleidoscope例子也LLVM的源码，另外，它也使用了大量的C++模版，使得编译很慢。在我的电脑中，编译LLVM库需要6个小时，在一个LLVM代码生成例子做少量修改，编译也要十几分钟，此外C++调试错误定位也需要大量的时间。所以，对于不知道如何写编程语言来说，python来实现更为合适，它允许你随时修改立刻执行，方便你做小实验，不需要你要编译器的全局观，或者某种哲学。发现问题，或者有新想法可以立刻加进去。PHP 的创造者 Rasmus Lerdorf 就说过:”我根本不知道该怎么编写一门编程语言，在我觉得需要时，就往里面加东西。” ，然而这样做出来的PHP是世界最好的语言:-)</p>
+<h3 id="rply"><a href="#rply" class="headerlink" title="rply"></a>rply</h3><p>PLY是python版的词法与语法分析工具，相当于C语言环境下的lex与yacc。rply是在ply做了一个很好的封装，提供了一组更为好用的API。</p>
+<h3 id="llvmlite"><a href="#llvmlite" class="headerlink" title="llvmlite"></a>llvmlite</h3><p>llvmlite是封装了LLVM库的python包，lite表示它没有完全支持LLVM，但是对于我们来说够用了。具体文档参见</p>
+<p><a href="https://llvmlite.readthedocs.io/en/latest/" target="_blank" rel="noopener">https://llvmlite.readthedocs.io/en/latest/</a></p>
+<h3 id="目标语言"><a href="#目标语言" class="headerlink" title="目标语言"></a>目标语言</h3><p>选择要实现的语言是foxbase语言，曾经比较火，但目前foxbase已经成为历史。语言具体规格可以参考<a href="https://github.com/acekingke/foxbase_inCloud" target="_blank" rel="noopener">foxbase_incloud</a>  ,里面”?”是foxbase的打印语句。</p>
+<h2 id="最终结果"><a href="#最终结果" class="headerlink" title="最终结果"></a>最终结果</h2><p>解释型的foxbase语言实现参见<a href="https://github.com/acekingke/foxbase_inCloud" target="_blank" rel="noopener">https://github.com/acekingke/foxbase_inCloud</a></p>
+<p>编译型foxbase语言实现参见<a href="https://github.com/acekingke/foxbase_compiler" target="_blank" rel="noopener">https://github.com/acekingke/foxbase_compiler</a></p>
+<h1 id><a href="#" class="headerlink" title=" "></a> </h1>
+      
+    </div>
+    
+	<! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+		   欣赏此文？求鼓励，求支持！
+        </span>
+        <br>
+      </div>  
+	<div id="donate_guide" class="donate_bar center hidden" >
+		<!-- 支付宝打赏图案 -->
+		<img src="/images/zhifubao.png" alt="支付宝打赏"> 
+		<!-- 微信打赏图案 -->
+		<img src="/images/weixin.jpg" alt="微信打赏">  
+    </div>
+	<script type="text/javascript">
+		document.getElementById('btn_donate').onclick = function(){
+			$('#donate_board').addClass('hidden');
+			$('#donate_guide').removeClass('hidden');
+		}
+	</script>
+</div>
+<! -- 添加捐赠图标 -->
+	
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/07/28/如何从0写编译器/" data-id="cjyp7qmnn0000d4fl69o7wvwe" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/07/08/现代硬件的高效查询计划的高效编译/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">现代硬件的高效查询计划的高效编译</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/“about”/">“about”</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/“about”/" style="font-size: 10px;">“about”</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/07/28/如何从0写编译器/">如何从0写编译器</a>
+          </li>
+        
+          <li>
+            <a href="/2019/07/08/现代硬件的高效查询计划的高效编译/">现代硬件的高效查询计划的高效编译</a>
+          </li>
+        
+          <li>
+            <a href="/2019/07/02/神奇的自然底数e/">神奇的自然底数e</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/30/基于现代硬件的数据库/">基于现代硬件的数据库</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/30/about/">关于</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
