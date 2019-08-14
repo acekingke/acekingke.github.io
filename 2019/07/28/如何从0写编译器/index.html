@@ -12,7 +12,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="简介​        编译原理这门课程较为复杂，一般情况下，学完编译原理不见得能自己写出一个语言的解释器，更不用说编译器了。这里给出一个python版的简单解释器与编译器，代码量很小，便于理解编译原理的编译过程。之所以用python，是因为python脚本语言，方便于边写边涂改。 ​        本文中，语法分析使用rply库，代码生成使用llvmlite， python版本为3.7.0, rp">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-30T02:40:44.775Z">
+<meta property="og:updated_time" content="2019-08-01T13:36:33.577Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何从0写编译器">
 <meta name="twitter:description" content="简介​        编译原理这门课程较为复杂，一般情况下，学完编译原理不见得能自己写出一个语言的解释器，更不用说编译器了。这里给出一个python版的简单解释器与编译器，代码量很小，便于理解编译原理的编译过程。之所以用python，是因为python脚本语言，方便于边写边涂改。 ​        本文中，语法分析使用rply库，代码生成使用llvmlite， python版本为3.7.0, rp">
@@ -89,13 +89,17 @@
         <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>​        编译原理这门课程较为复杂，一般情况下，学完编译原理不见得能自己写出一个语言的解释器，更不用说编译器了。这里给出一个python版的简单解释器与编译器，代码量很小，便于理解编译原理的编译过程。之所以用python，是因为python脚本语言，方便于边写边涂改。</p>
 <p>​        本文中，语法分析使用rply库，代码生成使用llvmlite， python版本为3.7.0, rply库与llvmlite安装如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install rply</span><br><span class="line">pip install llvmlite==0.26.0</span><br></pre></td></tr></table></figure></p>
 <p>​        LLVM官方有Kaleidoscope这个例子也可以用来学习, 这个例子用C++写的，LLVM6版本的使用C++11标准。但是并不推荐使用C++ 来进行，但是并不推荐使用C++来实现文中的例子。LLVM官方的文档并不太友好，内容相对代码比较滞后。如果要学习LLVM的代码生成，要深入研究LLVM的Kaleidoscope例子也LLVM的源码，另外，它也使用了大量的C++模版，使得编译很慢。在我的电脑中，编译LLVM库需要6个小时，在一个LLVM代码生成例子做少量修改，编译也要十几分钟，此外C++调试错误定位也需要大量的时间。所以，对于不知道如何写编程语言来说，python来实现更为合适，它允许你随时修改立刻执行，方便你做小实验，不需要你要编译器的全局观，或者某种哲学。发现问题，或者有新想法可以立刻加进去。PHP 的创造者 Rasmus Lerdorf 就说过:”我根本不知道该怎么编写一门编程语言，在我觉得需要时，就往里面加东西。” ，然而这样做出来的PHP是世界最好的语言:-)</p>
-<h3 id="rply"><a href="#rply" class="headerlink" title="rply"></a>rply</h3><p>PLY是python版的词法与语法分析工具，相当于C语言环境下的lex与yacc。rply是在ply做了一个很好的封装，提供了一组更为好用的API。</p>
+<h3 id="rply"><a href="#rply" class="headerlink" title="rply"></a>rply</h3><p>PLY是python版的词法与语法分析工具，相当于C语言环境下的lex与yacc。rply是在ply做了一个很好的封装，提供了一组更为好用的API。文档参见<a href="https://rply.readthedocs.io/en/latest/" target="_blank" rel="noopener">https://rply.readthedocs.io/en/latest/</a></p>
 <h3 id="llvmlite"><a href="#llvmlite" class="headerlink" title="llvmlite"></a>llvmlite</h3><p>llvmlite是封装了LLVM库的python包，lite表示它没有完全支持LLVM，但是对于我们来说够用了。具体文档参见</p>
 <p><a href="https://llvmlite.readthedocs.io/en/latest/" target="_blank" rel="noopener">https://llvmlite.readthedocs.io/en/latest/</a></p>
 <h3 id="目标语言"><a href="#目标语言" class="headerlink" title="目标语言"></a>目标语言</h3><p>选择要实现的语言是foxbase语言，曾经比较火，但目前foxbase已经成为历史。语言具体规格可以参考<a href="https://github.com/acekingke/foxbase_inCloud" target="_blank" rel="noopener">foxbase_incloud</a>  ,里面”?”是foxbase的打印语句。</p>
 <h2 id="最终结果"><a href="#最终结果" class="headerlink" title="最终结果"></a>最终结果</h2><p>解释型的foxbase语言实现参见<a href="https://github.com/acekingke/foxbase_inCloud" target="_blank" rel="noopener">https://github.com/acekingke/foxbase_inCloud</a></p>
 <p>编译型foxbase语言实现参见<a href="https://github.com/acekingke/foxbase_compiler" target="_blank" rel="noopener">https://github.com/acekingke/foxbase_compiler</a></p>
-<h1 id><a href="#" class="headerlink" title=" "></a> </h1>
+<h1 id><a href="#" class="headerlink" title=" "></a> </h1><h1 id="词法分析"><a href="#词法分析" class="headerlink" title="词法分析"></a>词法分析</h1><p>程序语言是机器与人类衔接的桥梁。与人类的自然语言类似，也有语法、语义，单词。词法分析目的是将源文件字符串流转为为Token流（单词流）。如果是不合法的单词，词法分析需要给出错误。</p>
+<p>rply词法分析使用十分简单，查看如下例子:</p>
+<p>​    </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from rply import  LexerGenerator</span><br><span class="line">lg = LexerGenerator()</span><br><span class="line"></span><br><span class="line">lg.add(&apos;NUMBER&apos;, r&apos;\d+&apos;)</span><br><span class="line"></span><br><span class="line">lg.add(&apos;PLUS&apos;, r&apos;\+&apos;)</span><br><span class="line">lg.add(&apos;MINUS&apos;, r&apos;-&apos;)</span><br></pre></td></tr></table></figure>
+<h1 id="语法分析"><a href="#语法分析" class="headerlink" title="语法分析"></a>语法分析</h1>
       
     </div>
     
@@ -125,7 +129,7 @@
 <! -- 添加捐赠图标 -->
 	
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/28/如何从0写编译器/" data-id="cjyp7sby50001bwflvnx3tmob" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/07/28/如何从0写编译器/" data-id="cjz242mzi0001usflysdbu2gz" class="article-share-link">Share</a>
       
       
     </footer>
@@ -156,7 +160,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/“about”/">“about”</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/“about”/">“about”</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/“database”/">“database”</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/“数学”/">“数学”</a></li></ul>
     </div>
   </div>
 
@@ -166,7 +170,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/“about”/" style="font-size: 10px;">“about”</a>
+      <a href="/tags/“about”/" style="font-size: 10px;">“about”</a> <a href="/tags/“database”/" style="font-size: 10px;">“database”</a> <a href="/tags/“数学”/" style="font-size: 10px;">“数学”</a>
     </div>
   </div>
 
@@ -243,6 +247,21 @@
 
 <script src="/js/script.js"></script>
 
-  </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>
