@@ -62,6 +62,95 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-一道面试题想到的" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/04/一道面试题想到的/" class="article-date">
+  <time datetime="2019-09-04T02:47:03.000Z" itemprop="datePublished">2019-09-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/04/一道面试题想到的/">一道面试题想到的</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p> 面试的时候有时候会听到这样的问题：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;如何不使用中间变量实现整数swap?&quot;</span><br></pre></td></tr></table></figure>
+<p>swap函数是用来交换两个变量的值，通常在C语言是这样实现的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">void swap(int *a, int *b) &#123;</span><br><span class="line">	int temp = *a;</span><br><span class="line">	*a = *b;</span><br><span class="line">	*b = temp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用时候如下，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int v1 = 2, v2 = 1;</span><br><span class="line">swap(&amp;v1, &amp;v2);</span><br></pre></td></tr></table></figure>
+<p>这里的temp是中间变量，<code>*a = *b</code>赋值语句会将<code>*a</code>变量中的内容覆盖为 <code>*b</code>的内容，因此在它之前使用temp变量将<code>*a</code>的内容保存起来，之后赋值给<code>*b</code>, 即完成了该算法。</p>
+<p>很多同学(包括我)往往因为不使用中间变量而卡壳了。网上流传了不使用中间变量实现swap的算法版本，大意如下, 注意， ^ 在C语言中是xor运算符：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">void swap2(int *a, int *b) &#123;</span><br><span class="line">	*b = *a ^ *b;</span><br><span class="line">	*a = *a ^ *b;</span><br><span class="line">	*b = *b ^ *a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><p>为什么swap2可行呢？我们来做如下的分析：</p>
+<p>假设<code>*a</code>的最初值为$\alpha$ , <code>*b</code>的最初值为$\beta$ , 之所以用希腊字母，主要是因为小写字母已经用作表示变量了，只好用希腊字母来表示变量中存储的值，大家不必太在意。swap2函数第二行<code>*b = *a ^ *b;</code> 计算结果：</p>
+<p>*b $\leftarrow \alpha$  xor $\beta$</p>
+<p>第三行：<code>*a = *a ^ *b;</code> ,请注意到<code>*b</code>的值此时$\alpha$  xor $\beta$ ， 所以有</p>
+<p>*a  $\leftarrow \alpha$ xor ($ \alpha$  xor $\beta$)</p>
+<p>$\alpha$ xor  $\alpha$ 为0， 0 xor $\beta$ 为 $\beta$,  再赋值到<code>*a</code>， 这时候<code>*a</code> 就变成$\beta$了。</p>
+<p>第四行<code>*b = *b ^ *a;</code> 此时<code>*a</code>已经是$\beta$ 了， *b 还是$\alpha$  xor $\beta$ ，所以第四行的代码实际赋值操作是：</p>
+<p>*b  $\leftarrow$  ($ \alpha$  xor $\beta$)  xor $\beta$ </p>
+<p>这样*b值就赋值为$\alpha$ ,于是完成了交换操作。</p>
+<p>依据上面的分析，我们可以立刻想到如下的算法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">void swap3(int *a, int *b) &#123;</span><br><span class="line">	*b = *a - *b;</span><br><span class="line">	*a = *a - *b;</span><br><span class="line">	*b = *b + *a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里实际运行过程如下：</p>
+<p>void swap3(int <code>*a</code>, int <code>*b</code>) {</p>
+<p>​    <code>*b</code> $\leftarrow \alpha$  - $\beta$<br>​     <code>*a</code> $\leftarrow \alpha - (\alpha$  - $\beta)$<br>   <code>*b</code> $\leftarrow  (\alpha  - \beta) + \beta$</p>
+<p>}</p>
+<p>这里不考虑加法的溢出问题。</p>
+<p>如果不用加减法，不用xor，还有没有类似的运算符可以实现不使用中间变量的swap算法呢？</p>
+<p>答案是有的。只要这个运算是一个<strong>群</strong> 就可以了。</p>
+<ul>
+<li>群的定义如下： </li>
+</ul>
+<p>​       设S是一个非空集合， 而 $\cdot$ 是一个二元运算，</p>
+<p>​    (1)  * 运算如果满足结合律：</p>
+<p>$a\cdot b\cdot c  = a \cdot (b\cdot c) $ 则代数系统<s; $\cdot$> 是一个半群。</s;></p>
+<p>   (2) * 运算有单位元e</p>
+<p>$a \cdot e = e \cdot a = a$</p>
+<p>  (3)  每个元素有逆元 </p>
+<p>$\forall a \exists a^{-1}$ 使得 $ a \cdot a^{-1}  = e $</p>
+<p>所以这些算法实质如下：<br>void swap(int <code>*a</code>, int <code>*b</code>) {<br>    <code>*b</code> = <code>*a</code> $\cdot  (*b)  ^{-1}$;</p>
+<p>​    <code>*a</code> = <code>*a</code> $\cdot (*b) ^{-1}$;</p>
+<p>​    <code>*b</code> = <code>*b</code> $\cdot   (*a)$;<br>}</p>
+<p>分析方法与加法和xor相同，可以看到，+运算与xor运算都是群。 在加法运算中，$a$ 的逆元为 $-a$, 单位元e为0。</p>
+<p>同理，xor运算中，$a$ xor $a = 0$  ，0位单位元，$a$的逆元为$a$ .</p>
+<p>所以，这里不光是xor和+ 运算可以使用，只要是群运算都是可以。</p>
+<h1 id="评估"><a href="#评估" class="headerlink" title="评估"></a>评估</h1><p>我们来看看汇编之后的结果.</p>
+<p>传统的swap</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">void swap(int *a, int *b) &#123;</span><br><span class="line">000000013FA16140  mov         qword ptr [rsp+10h],rdx  </span><br><span class="line">000000013FA16145  mov         qword ptr [rsp+8],rcx  </span><br><span class="line">000000013FA1614A  push        rdi  </span><br><span class="line">000000013FA1614B  sub         rsp,10h  </span><br><span class="line">000000013FA1614F  mov         rdi,rsp  </span><br><span class="line">000000013FA16152  mov         ecx,4  </span><br><span class="line">000000013FA16157  mov         eax,0CCCCCCCCh  </span><br><span class="line">000000013FA1615C  rep stos    dword ptr [rdi]  </span><br><span class="line">000000013FA1615E  mov         rcx,qword ptr [a]  </span><br><span class="line">	int temp = *a;</span><br><span class="line">000000013FA16163  mov         rax,qword ptr [a]  </span><br><span class="line">000000013FA16168  mov         eax,dword ptr [rax]  </span><br><span class="line">000000013FA1616A  mov         dword ptr [rsp],eax  </span><br><span class="line">	*a = *b;</span><br><span class="line">000000013FA1616D  mov         rax,qword ptr [a]  </span><br><span class="line">000000013FA16172  mov         rcx,qword ptr [b]  </span><br><span class="line">000000013FA16177  mov         ecx,dword ptr [rcx]  </span><br><span class="line">000000013FA16179  mov         dword ptr [rax],ecx  </span><br><span class="line">	*b = temp;</span><br><span class="line">000000013FA1617B  mov         rax,qword ptr [b]  </span><br><span class="line">000000013FA16180  mov         ecx,dword ptr [rsp]  </span><br><span class="line">000000013FA16183  mov         dword ptr [rax],ecx  </span><br><span class="line">&#125;</span><br><span class="line">000000013FA16185  add         rsp,10h  </span><br><span class="line">000000013FA16189  pop         rdi  </span><br><span class="line">000000013FA1618A  ret</span><br></pre></td></tr></table></figure>
+<p>不使用中间变量的swap</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">void swap2(int *a, int *b) &#123;</span><br><span class="line">000000013FA16080  mov         qword ptr [a],rdx  </span><br><span class="line">000000013FA16085  mov         qword ptr [rsp+8],rcx  </span><br><span class="line">000000013FA1608A  push        rdi  </span><br><span class="line">	*b = *a ^ *b;</span><br><span class="line">000000013FA1608B  mov         rax,qword ptr [a]  </span><br><span class="line">000000013FA16090  mov         rcx,qword ptr [b]  </span><br><span class="line">000000013FA16095  mov         ecx,dword ptr [rcx]  </span><br><span class="line">000000013FA16097  mov         eax,dword ptr [rax]  </span><br><span class="line">000000013FA16099  xor         eax,ecx  </span><br><span class="line">000000013FA1609B  mov         rcx,qword ptr [b]  </span><br><span class="line">000000013FA160A0  mov         dword ptr [rcx],eax  </span><br><span class="line">	*a = *a ^ *b;</span><br><span class="line">000000013FA160A2  mov         rax,qword ptr [a]  </span><br><span class="line">000000013FA160A7  mov         rcx,qword ptr [b]  </span><br><span class="line">000000013FA160AC  mov         ecx,dword ptr [rcx]  </span><br><span class="line">000000013FA160AE  mov         eax,dword ptr [rax]  </span><br><span class="line">000000013FA160B0  xor         eax,ecx  </span><br><span class="line">000000013FA160B2  mov         rcx,qword ptr [a]  </span><br><span class="line">000000013FA160B7  mov         dword ptr [rcx],eax  </span><br><span class="line">	*b = *b ^ *a;</span><br><span class="line">000000013FA160B9  mov         rax,qword ptr [b]  </span><br><span class="line">000000013FA160BE  mov         rcx,qword ptr [a]  </span><br><span class="line">000000013FA160C3  mov         ecx,dword ptr [rcx]  </span><br><span class="line">000000013FA160C5  mov         eax,dword ptr [rax]  </span><br><span class="line">000000013FA160C7  xor         eax,ecx  </span><br><span class="line">000000013FA160C9  mov         rcx,qword ptr [b]  </span><br><span class="line">000000013FA160CE  mov         dword ptr [rcx],eax</span><br></pre></td></tr></table></figure>
+<p>可以看到，使用xor 方式实现的swap与使用中间变量的swap相比，指令偏多，效率低。</p>
+<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>虽然不使用中间变量实现swap听起来十分高大上，但是实际收获不高（仅仅省一个字长的临时变量），而且性能较低（可以从反汇编中看到），使用场景也局限（加法的不能处理较大的整数，会有溢出问题，xor不能处理浮点数），纯粹为了考人而考人，社会主义建设中有许多问题等待解决，奉劝大家不要把精力放在这些无聊的题目上。</p>
+
+      
+    </div>
+    
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/09/04/一道面试题想到的/" data-id="ck04t48ka0000esfllsi8wn0w" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数学-算法/">数学,算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-如何从0写编译器" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/07/28/如何从0写编译器/" class="article-date">
@@ -102,7 +191,7 @@
     </div>
     
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/28/如何从0写编译器/" data-id="cjz242mzi0001usflysdbu2gz" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/07/28/如何从0写编译器/" data-id="ck04t2sma00019kfl0d8h2ncx" class="article-share-link">Share</a>
       
       
     </footer>
@@ -321,9 +410,11 @@
     </div>
     
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/08/现代硬件的高效查询计划的高效编译/" data-id="cjz242n190008usfl8uez48r3" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/07/08/现代硬件的高效查询计划的高效编译/" data-id="ck04t2sob000a9kflqwbvlzd0" class="article-share-link">Share</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/“database”/">“database”</a></li></ul>
+
     </footer>
   </div>
   
@@ -436,10 +527,10 @@ P(k) = \frac{\lambda^k}{k!}\cdot\left(\lim\limits_{n \to \infty}(1-\frac{\lambda
     </div>
     
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/02/神奇的自然底数e/" data-id="cjz242mzt0003usfl5of2bnrk" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/07/02/神奇的自然底数e/" data-id="ck04t2smi00039kfl6rx092lb" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/“数学”/">“数学”</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数学/">数学</a></li></ul>
 
     </footer>
   </div>
@@ -539,7 +630,7 @@ ukowski, M. (2009). Balancing vectorized query execution with bandwidth-optimize
     </div>
     
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/30/基于现代硬件的数据库/" data-id="cjz242n0u0005usfluv2awcn9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/06/30/基于现代硬件的数据库/" data-id="ck04t2snv00079kfl2gr0cfpm" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/“database”/">“database”</a></li></ul>
@@ -579,7 +670,7 @@ ukowski, M. (2009). Balancing vectorized query execution with bandwidth-optimize
     </div>
     
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/30/about/" data-id="cjz242mz80000usflqthn66mt" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/06/30/about/" data-id="ck04t2slq00009kflhbovwo0y" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/“about”/">“about”</a></li></ul>
@@ -603,7 +694,7 @@ ukowski, M. (2009). Balancing vectorized query execution with bandwidth-optimize
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/“about”/">“about”</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/“database”/">“database”</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/“数学”/">“数学”</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/“about”/">“about”</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/“database”/">“database”</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数学/">数学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数学-算法/">数学,算法</a></li></ul>
     </div>
   </div>
 
@@ -613,7 +704,7 @@ ukowski, M. (2009). Balancing vectorized query execution with bandwidth-optimize
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/“about”/" style="font-size: 10px;">“about”</a> <a href="/tags/“database”/" style="font-size: 10px;">“database”</a> <a href="/tags/“数学”/" style="font-size: 10px;">“数学”</a>
+      <a href="/tags/“about”/" style="font-size: 10px;">“about”</a> <a href="/tags/“database”/" style="font-size: 20px;">“database”</a> <a href="/tags/数学/" style="font-size: 10px;">数学</a> <a href="/tags/数学-算法/" style="font-size: 10px;">数学,算法</a>
     </div>
   </div>
 
@@ -622,7 +713,7 @@ ukowski, M. (2009). Balancing vectorized query execution with bandwidth-optimize
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
     </div>
   </div>
 
@@ -633,6 +724,10 @@ ukowski, M. (2009). Balancing vectorized query execution with bandwidth-optimize
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/09/04/一道面试题想到的/">一道面试题想到的</a>
+          </li>
         
           <li>
             <a href="/2019/07/28/如何从0写编译器/">如何从0写编译器</a>
@@ -648,10 +743,6 @@ ukowski, M. (2009). Balancing vectorized query execution with bandwidth-optimize
         
           <li>
             <a href="/2019/06/30/基于现代硬件的数据库/">基于现代硬件的数据库</a>
-          </li>
-        
-          <li>
-            <a href="/2019/06/30/about/">关于</a>
           </li>
         
       </ul>
