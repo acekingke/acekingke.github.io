@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="问题 面试的时候有时候会听到这样的问题： 1&amp;quot;如何不使用中间变量实现整数swap?&amp;quot; swap函数是用来交换两个变量的值，通常在C语言是这样实现的 12345void swap(int *a, int *b) &amp;#123;	int temp = *a;	*a = *b;	*b = temp;&amp;#125; 使用时候如下， 12int v1 = 2, v2 = 1;swap(&amp;am">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-09-04T05:41:24.634Z">
+<meta property="og:updated_time" content="2019-09-04T05:44:33.652Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一道面试题想到的">
 <meta name="twitter:description" content="问题 面试的时候有时候会听到这样的问题： 1&amp;quot;如何不使用中间变量实现整数swap?&amp;quot; swap函数是用来交换两个变量的值，通常在C语言是这样实现的 12345void swap(int *a, int *b) &amp;#123;	int temp = *a;	*a = *b;	*b = temp;&amp;#125; 使用时候如下， 12int v1 = 2, v2 = 1;swap(&amp;am">
@@ -128,7 +128,7 @@
 <p>​    <code>*a</code> = <code>*a</code> $\cdot (*b) ^{-1}$;</p>
 <p>​    <code>*b</code> = <code>*b</code> $\cdot   (*a)$;<br>}</p>
 <p>分析方法与加法和xor相同，可以看到，+运算与xor运算都是群。 在加法运算中，$a$ 的逆元为 $-a$, 单位元e为0。</p>
-<p>同理，xor运算中，$a$ xor $a = 0$  ，0位单位元，$a$的逆元为$a$ .</p>
+<p>同理，xor运算中，$a$ xor $a = 0$ , $ $ xor $a = a$，0位单位元，$a$的逆元为$a$ .</p>
 <p>所以，这里不光是xor和+ 运算可以使用，只要是群运算都是可以。</p>
 <h1 id="评估"><a href="#评估" class="headerlink" title="评估"></a>评估</h1><p>我们来看看汇编之后的结果.</p>
 <p>传统的swap</p>
@@ -167,7 +167,7 @@
 <! -- 添加捐赠图标 -->
 	
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/09/04/一道面试题想到的/" data-id="ck04t48ka0000esfllsi8wn0w" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/09/04/一道面试题想到的/" data-id="ck04u7foe0001ycflyyugp1yb" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数学-算法/">数学,算法</a></li></ul>
