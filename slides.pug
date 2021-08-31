@@ -1,0 +1,198 @@
+section
+  h1(style="font-variant: small-caps") 如何用go写parser
+  hr
+  h4
+    | acekingke
+    span.sep &bull;
+    u 柯煜昌
+    span.sep &bull;
+    | https://github.com/acekingke
+  hr 
+  p 内容简介
+  ul 
+    li 编译原理回顾
+      ul
+        li 形式文法基础
+        li LR,LALR分析器
+    li Yacc 
+    li 语法分析器 demo
+section  
+  h2 什么是parser
+  .columns 
+    .column
+      h3 string
+      .pre 1+2*61
+
+    .column $\to$
+    .column
+      h3 expr
+      pre.
+ 
+             E
+           / | \
+          E  +  E
+          |    /|\
+          i   E * E 
+              |   |
+              i   i
+  p.fragment $程序语言$让人和机器都能看懂..., 
+  p.fragment parser 能让机器看懂程序语言
+section 
+  h2 应用场景
+  ul 
+    li 程序语言编译器、领域专用语言
+    li 文件格式解析(通常)
+    li 网络协议解析
+section
+  h2 形式文法基础1
+  ul    
+    li 语言&句法 
+      br 
+      span.fragment $G = \langle V, N, P, S \rangle $ 
+      span.fragment  G 是语法的一个抽象概念，它是一个四元组，其中：
+      li.fragment  V 是一个集合，其中包含了所有的终结符
+      li.fragment N 是一个集合，其中包含了所有的非终结符
+      li.fragment  P 是一个集合，包含所有产生式规则
+      li.fragment  S 非终结符,即开始符号
+section
+  h2 形式文法基础2
+  p.fragment. 
+    示例：(表达式)
+    <br>
+    $
+    E \to i \\
+    E \to E + E \\
+    E \to E * E \\
+    E \to ( E ) \\
+    $ 
+    <br>
+  cite.
+    大写字母表示非终结符, 小写字母a,b,c,t... 是终结符
+    希腊字母是字符串,包含终结符和非终结符
+    x,y,z 是终结符串
+
+  // li.fragment Math is easy: $\displaystyle \sum_{i=1}^n i^2$
+section.data-auto-animate
+  h2 上下文无关文法 
+  p. 
+    $ \alpha \to \beta $
+    <br>
+    $\alpha$ 始终是一个非终结符
+    <br>
+    形如:$aA \to ab$ 就不是上下文无关文法 <br>
+    形如:
+    <br>
+    $  
+    A \to aB \\
+    B \to b 
+    $
+    <br>
+    就是上下文无关文法 <br>
+section.data-auto-animate
+  h2 上下文无关文法 
+  p.
+    $  
+    A \to aB \\
+    B \to b 
+    $
+    <br>
+    就是上下文无关文法 <br>
+  p.fragment("fade-out" data-fragment-index="0") 
+    strong 推导:
+    | 由$A \to aB 和 B \to b $ 生成字符串$ab$ 
+    br
+    | 自顶向下, 向左推导, LL分析器, ANTLR 
+  p.fragment("fade-out" data-fragment-index="1")
+    strong 规约:
+    | 由$ab$ 生成$aB,$生成$A$ 
+    br
+    | 自底向上, 向右规约, LR, YACC 
+ 
+  
+section
+  h2 有限自动机
+  div.columns   
+    p.column.
+      示例(LR(0) 分析器):
+      <br>
+        $ S \to E \\
+        E \to aEb \\
+        E \to ab
+        $
+    p.column
+      img(src="images/dfa.png")
+    
+section
+  h2 分析表
+  p. 
+    $s_n$ 表示移进到状态n 
+    <br>
+    $r_k$ 表示按照规则 k 规约
+  div.columns
+        .column
+          span LR 分析器结构
+          img(src="images/lrpaser.png")
+        .column
+          span 动作表格
+          img(src="images/acttap.png")
+        .column 
+          span 堆栈示例
+          img(src="images/stack.png")
+
+section.data-auto-animate
+  h2 LR(0) 改进
+  p. 
+    无法分析如下语法：<br>
+     $
+      L \to D; \\
+      D \to t V \\
+      V \to i \\
+      V \to i,V
+     $ <br>
+     D 为类型声明, V 为变量, t为类型, i为标识符
+  pre 
+    code(class="lang-c")
+      script(type="text/template").
+          int x
+          int x,y 
+  p 解析到  int x $\bullet$,y 应该规约还是应该移进?
+  p.fragment 需要向前看一个字符
+section.data-auto-animate
+  h2 LR(0) 改进
+  - 
+    var variants = ["简单LR(SLR, Simple LR parser)", 
+    "正统LR (Canonical LR parser)",
+    "前看LR(LALR, Look-ahead LR parser)"]
+  ul
+    each item in variants
+      li= item
+  p(align="left") yacc/bison 采用LALR(1)生成解析器
+  p(align="left") LA表示Look Ahead,括号中1表示前看符号个数
+section.data-auto-animate
+  h2 LR(0) 改进
+  p. 
+    LALR(1) 仍然无法解决表达式语法:<br>
+    $ E \to i \\
+      E \to E + E \\
+      E \to E * E \\
+      E \to ( E ) \\
+    $ <br>
+    如 $ E+E\bullet *i \\
+       E+ E\bullet + i$ <br>应该规约还是应该移进?
+section.data-auto-animate
+  h2 LR(0) 改进
+  p 采用优先级, 左结合, 右结合
+  p yacc 语法是:
+  pre.fragment
+    code(class="lang-yacc")
+      script(type="text/template").
+          %left '+'
+          %left '*'
+  p.fragment.
+    $ E+E\bullet *i  \\
+       E+ E\bullet + i \\
+    应该规约还是应该移进? \\
+      \text{ * 优先级高于+, 移进} \\
+      \text{ + 左结合, 规约}
+    $ 
+    

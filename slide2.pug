@@ -1,0 +1,204 @@
+section
+  h2 yaccgo 
+  p 结构
+  pre.          
+                                 grammar 
+                                  rules
+                                    |
+                                    v
+                               +---------+
+                               |  Yacc   |
+                               +---------+
+                                    |
+                                    v
+                +---------+    +---------+
+       Input -> |  lexer  | -> | yyparse | -> Parsed input
+                +---------+    +---------+
+
+                            Yacc 
+section.data-auto-animate
+  h2 lexer 
+  a(href='https://talks.golang.org/2011/lex.slide') Rob Pike lexer 方法
+  pre 
+    code(data-line-numbers="|4-5", class="lang-go")
+      script(type="text/template").       
+          // run lexes the input by executing state functions
+          // until the state is nil.
+          func run() {
+              for state := startState; state != nil; {
+                  state = state(lexer)
+              }
+          }
+  cite
+    | Rob Pike 认为, 正则表达式方式难以理解也难以调试, 
+    br
+    | 而使用go语言实现lexer不是很难, 
+    br 
+    | 以上是他给出一个简单的lexer实现的框架
+section.data-auto-animate
+  h2 lexer 
+  a(href='https://talks.golang.org/2011/lex.slide') Rob Pike lexer 方法
+  pre 
+    code(data-line-numbers="3-5|8-10|13-15", class="lang-go")
+      script(type="text/template").
+
+          func lexNumber(l *lexer) stateFn {
+            // Optional leading sign.
+            l.accept("+-")
+            // Is it hex?
+            digits := "0123456789"
+            if l.accept("0") && l.accept("xX") {
+                digits = "0123456789abcdefABCDEF"
+            }
+            l.acceptRun(digits)
+            if l.accept(".") {
+                l.acceptRun(digits)
+            }
+            if l.accept("eE") {
+                l.accept("+-")
+                l.acceptRun("0123456789")
+            }
+            // .......
+          }
+section 
+    h2 yaccgo 
+    p 生成解析器的工具
+    p 生成parser的go代码 
+    .columns 
+        .column input_file.y
+        .column  $ \to $
+        .column   yaccgo 
+        .column  $ \to $
+        .column  parser.go 
+    p 编译生成的解析器
+    .columns
+        .column   parser.go 
+        .column  $ \to $
+        .column  golang compiler
+        .column  $ \to $
+        .column   parser program 
+    p 解析器运行
+    .columns
+        .column  input string
+        .column  $ \to $
+        .column   parser program
+        .column  $ \to $
+        .column  output string
+section.data-auto-animate
+  h2 y文件
+  p 结构
+  pre
+    code.
+
+        声明部分
+        
+        %%
+        
+        规则部分
+
+        %%
+        辅助函数
+section.data-auto-animate
+  h2 y文件
+  p 声明部分
+  pre
+      code.   
+        %{
+            // 嵌入的 go 代码
+        %}
+        // token 声明, type 声明, start 声明, union 声明
+section.data-auto-animate
+  h2 y文件
+  p 规则部分
+    pre
+        code left part : right part { action }
+  p 例如：
+  pre
+      code.   
+        E:
+            E '+' E {
+                $$	=	$1 + $3
+            }
+  cite
+    |  $$ 表示left part 属性值
+    br 
+    | $n 表示right part 中的第n个符号属性值
+section 
+  h2 全貌
+  pre 
+    code(data-line-numbers="2-7|9-11|13-20|23-25", class="lang-go")
+      script(type="text/template").
+
+                // language: go
+                %{
+                package main
+                import (
+                    "fmt"
+                )
+                %}
+
+                %union {
+                    val int
+                }
+
+                %type	<val>	E
+                %token '+'  '*'   '(' ')' 
+                %left '+'  
+                %left '*'  
+                %token	<val>	NUM
+                %token NUM 100
+                %start E
+                %%
+
+                E:
+                    E '+' E {
+                        $$	=	$1 + $3
+                    }	
+                    | E '*' E {
+                        $$	=	$1 * $3
+                    }
+                    | '(' E ')' {
+                        $$	=	$2
+                    }
+                    | NUM {
+                        $$	=	$1
+                    }
+                    
+                %%
+                const EOF = -1
+                // The parser expects the lexer to return 0 on EOF.  Give it a name
+                // for clarity.
+                func GetToken(input string, valTy *ValType, pos *int) int {
+                    if *pos >= len(input) {
+                        return -1
+                    } else {
+                    // ... 
+                    }
+section 
+  h2 创建
+  ul
+    li 创建一个解析器
+        pre 
+            code(class="bash").
+                ./bin/yaccgo generate go  examples/expr.y out/expr.go
+    li  创建携带web调试的解析器
+        pre 
+            code(class="bash").
+                ./bin/yaccgo generate go --httpdebug=true examples/exprhttp.y out/expr.go
+    li 更多参见 github.com/acekingke/yaccgo
+
+section 
+    h1 演示环节
+    h1 Any Question
+    h1 ?
+section 
+  h2 参考文献
+  ul 
+    li 
+      a(href='https://www.seas.upenn.edu/~cis511/notes/cis511-sl9.pdf') upenn.edu 
+    li
+      a(href='https://zh.m.wikipedia.org/zh-cn/LR%E5%89%96%E6%9E%90%E5%99%A8') wiki
+    li 
+      a(href='https://talks.golang.org/2011/lex.slide') Rob Pike lexer 方法
+    li
+      a(href='https://github.com/acekingke/yaccgo') github.com/acekingke/yaccgo
