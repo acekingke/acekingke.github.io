@@ -1,4 +1,4 @@
-<!DOCTYPE html><html nighteye="disabled"><head><meta charset="utf8"><script src="node_modules/reveal.js/dist/reveal.js"></script><script src="node_modules/reveal.js/plugin/math/math.js"></script><script src="node_modules/reveal.js-plugins/chalkboard/plugin.js"></script><script src="node_modules/@svgdotjs/svg.js/dist/svg.min.js"></script><script src="node_modules/svgtiler/lib/svgtiler.js"></script><script src="node_modules/reveal.js/plugin/highlight/highlight.js"></script><link rel="stylesheet" href="node_modules/reveal.js/plugin/highlight/monokai.css"><link rel="stylesheet" href="node_modules/reveal.js/dist/reveal.css"><link rel="stylesheet" href="node_modules/reveal.js/dist/theme/black.css"><link rel="stylesheet" href="node_modules/reveal.js-plugins/chalkboard/style.css"><link rel="stylesheet" href="node_modules/reveal.js-plugins/menu/font-awesome/css/all.css"><link rel="stylesheet" href="node_modules/@fontsource/merriweather/latin-400.css"><link rel="stylesheet" href="node_modules/@fontsource/merriweather/latin-400-italic.css"><link rel="stylesheet" href="node_modules/@fontsource/merriweather/latin-900.css"><link rel="stylesheet" href="node_modules/@fontsource/merriweather/latin-900-italic.css"><style>:root {
+<!DOCTYPE html><html nighteye="disabled"><head><meta charset="utf8"><script src="scripts/reveal.js/dist/reveal.js"></script><script src="scripts/reveal.js/plugin/math/math.js"></script><script src="scripts/reveal.js-plugins/chalkboard/plugin.js"></script><script src="scripts/@svgdotjs/svg.js/dist/svg.min.js"></script><script src="scripts/svgtiler/lib/svgtiler.js"></script><script src="scripts/reveal.js/plugin/highlight/highlight.js"></script><link rel="stylesheet" href="scripts/reveal.js/plugin/highlight/monokai.css"><link rel="stylesheet" href="scripts/reveal.js/dist/reveal.css"><link rel="stylesheet" href="scripts/reveal.js/dist/theme/black.css"><link rel="stylesheet" href="scripts/reveal.js-plugins/chalkboard/style.css"><link rel="stylesheet" href="scripts/reveal.js-plugins/menu/font-awesome/css/all.css"><link rel="stylesheet" href="scripts/@fontsource/merriweather/latin-400.css"><link rel="stylesheet" href="scripts/@fontsource/merriweather/latin-400-italic.css"><link rel="stylesheet" href="scripts/@fontsource/merriweather/latin-900.css"><link rel="stylesheet" href="scripts/@fontsource/merriweather/latin-900-italic.css"><style>:root {
   --r-main-font: Merriweather, serif;
   --r-heading-font: Merriweather, serif;
   --r-heading-text-transform: none;
@@ -283,10 +283,10 @@ func GetToken(input string, valTy *ValType, pos *int) int {
     autoAnimateUnmatched: false,
     plugins: [RevealMath.KaTeX, RevealChalkboard, RevealHighlight],
     katex: {
-      local: 'node_modules/katex'
+      local: 'scripts/katex'
     },
     chalkboard: {
-      background: ['none', 'node_modules/reveal.js-plugins/chalkboard/img/blackboard.png'],
+      background: ['none', 'scripts/reveal.js-plugins/chalkboard/img/blackboard.png'],
       boardmarkerWidth: 7,
       colorButtons: true,
       theme: 'whiteboard'
